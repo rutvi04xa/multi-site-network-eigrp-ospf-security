@@ -83,10 +83,12 @@ VLAN trunking into the Layer 3 switch was the other place I had to slow down —
 - **No failover/redundancy** — each site has a single edge router, so a router failure isolates that site. A production design would add a second edge router per site with HSRP/VRRP.
 - **No formal IPS/IDS or ACL-based segmentation** between sites — access control here is limited to AAA on device management. A next iteration would add ACLs restricting inter-site traffic to only what's required.
 - **Packet Tracer's simulation limits** mean some real-world behaviors (e.g., full BGP, QoS, or hardware-specific STP timers) aren't testable here — this project focuses on protocols Packet Tracer models accurately.
+
 ## Files
  
-- `topology/multi-site-network-topology.pkt` — full Packet Tracer file (built in Packet Tracer 8.x)
+- `multi-site-network-topology.pkt` — full Packet Tracer file (built in Packet Tracer 8.x)
 - `screenshots/` — all configuration and verification screenshots (flat folder)
+  
 ## Tools Used
  
 Cisco Packet Tracer · EIGRP · OSPF · RIP · TACACS+ · RADIUS · VLANs · STP
