@@ -70,4 +70,25 @@ Every device — across all three sites, all VLANs, and all subnets — was test
 ![Site A pinging network](screenshots/fig1.41-site-a-pinging-network.png)
  
 Screenshots of ping tests from representative devices in each site are included under `screenshots/`.
+
+## Reflection
+ 
+The routing redistribution between sites gave me the most trouble. The first time I redistributed EIGRP into OSPF at the Site B edge router, the routes just weren't showing up on the other side — no errors, they just silently didn't propagate. It took some digging to realize EIGRP needs an explicit seed metric when redistributing from another protocol (bandwidth, delay, reliability, load, MTU), since it doesn't have a default the way some other protocols do. Once I set that manually, the routes started appearing correctly. Small thing, but it's the kind of detail that doesn't show up until you actually try it.
+ 
+VLAN trunking into the Layer 3 switch was the other place I had to slow down — matching the native VLAN and encapsulation on both ends of the trunk mattered more than I expected going in. And running TACACS+ and RADIUS side by side across sites made the difference between the two protocols concrete instead of just something I'd read about — TACACS+ handling command-level authorization vs. RADIUS bundling authentication and accounting together.
+ 
+## Limitations & What I'd Do Differently
+ 
+- **Static redistribution metrics** were used rather than route filtering with route maps — in a production network, route maps would give more precise control over which routes cross protocol boundaries and prevent accidental route feedback loops.
+- **No failover/redundancy** — each site has a single edge router, so a router failure isolates that site. A production design would add a second edge router per site with HSRP/VRRP.
+- **No formal IPS/IDS or ACL-based segmentation** between sites — access control here is limited to AAA on device management. A next iteration would add ACLs restricting inter-site traffic to only what's required.
+- **Packet Tracer's simulation limits** mean some real-world behaviors (e.g., full BGP, QoS, or hardware-specific STP timers) aren't testable here — this project focuses on protocols Packet Tracer models accurately.
+## Files
+ 
+- `topology/multi-site-network-topology.pkt` — full Packet Tracer file (built in Packet Tracer 8.x)
+- `screenshots/` — all configuration and verification screenshots (flat folder)
+## Tools Used
+ 
+Cisco Packet Tracer · EIGRP · OSPF · RIP · TACACS+ · RADIUS · VLANs · STP
+
  
